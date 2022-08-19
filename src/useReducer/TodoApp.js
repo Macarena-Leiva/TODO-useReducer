@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react'
+import { useForm } from './hooks/useForm';
 import { todoReducer } from './todoReducer';
 
 // estado inicial de mi app
@@ -13,12 +14,18 @@ export const TodoApp = () => {
     const [todos, dispatch] = useReducer(todoReducer, initialState) 
     console.log(todos);
 
+    //desestructuración de arrays
+            //desestructuro el objeto
+    const [ {description}, handleInputChange, reset ] = useForm({ //va a recibir como argumento, un objeto, que va a tener la key de la description 
+        description:'' //como un string vacío, y lo voy a asociar con el name del input, tiene que coincidir.
+    })
+
 const handleSubmit = (e) =>{ //se envia el submit del form
     e.preventDefault();
 
     const newTodo = { //creamos un nuevo TODO
         id : new Date().getTime(),
-        desc: 'Nueva tarea',
+        desc: description,
         done: false
     };
 
@@ -28,6 +35,7 @@ const handleSubmit = (e) =>{ //se envia el submit del form
     }
 
     dispatch(action); // y mandamos esa accion mediante el dispatch
+    reset();
 }
 
   return (
@@ -52,6 +60,8 @@ const handleSubmit = (e) =>{ //se envia el submit del form
                 type='text'
                 name= 'description'
                 placeholder='Aprender ...'
+                value={description}
+                onChange={handleInputChange}
             />
 
             <button type='submit'>AGREGAR</button>
