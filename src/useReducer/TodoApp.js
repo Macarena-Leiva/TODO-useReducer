@@ -31,6 +31,17 @@ export const TodoApp = () => {
         localStorage.setItem('todos', JSON.stringify(todos))//convierto a json que sea un string
     },[todos]) //que se ejecute cada vez que los todos cambien
 
+    const handleDelete = (todoId) => {
+      //creo la accion
+      const action ={
+        type: 'delete',
+        payload:todoId
+      }
+
+      dispatch(action);
+
+    }
+
     const handleSubmit = (e) =>{ //se envia el submit del form
     e.preventDefault();
 
@@ -61,7 +72,7 @@ export const TodoApp = () => {
              todos.map((todo, i) => (
                 <li key={todo.id}>
                 <p>{i + 1} {todo.desc}</p>   
-                <button>BORRAR</button>
+                <button onClick={()=> handleDelete(todo.id)}>BORRAR</button>
                 </li>
              ))
             }
