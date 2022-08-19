@@ -1,17 +1,23 @@
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { useForm } from './hooks/useForm';
 import { todoReducer } from './todoReducer';
 
 // estado inicial de mi app
-const initialState = [{
+
+
+const init = () =>{
+    // cuando se recargue el componente se vuelve a ejecutar esta funcion init 
+    return JSON.parse( localStorage.getItem('todos')) || [] ; // si existen todos tengo que regresarlos como arrays y sino existen tengo que regresar un array vacio que seara mi estado inicial 
+/* return [{
     id : new Date().getTime(),
     desc: 'Aprender Reduce',
     done: false
-}];
+}]; */
+}
 
 export const TodoApp = () => {
 //el dispach me va a ayudar a disparar las acciones hacia mi reducer
-    const [todos, dispatch] = useReducer(todoReducer, initialState) 
+    const [todos, dispatch] = useReducer(todoReducer, [], init)//la funcion init se llama y lo que retorna es el initialState,para que esa funcion no se este ejecutando cada vez que hay un cambio  
     console.log(todos);
 
     //desestructuración de arrays
@@ -20,8 +26,17 @@ export const TodoApp = () => {
         description:'' //como un string vacío, y lo voy a asociar con el name del input, tiene que coincidir.
     })
 
-const handleSubmit = (e) =>{ //se envia el submit del form
+    //grabar en el localstorage cualquier cambio que haya en los todos 
+    useEffect ( () =>{
+        localStorage.setItem('todos', JSON.stringify(todos))//convierto a json que sea un string
+    },[todos]) //que se ejecute cada vez que los todos cambien
+
+    const handleSubmit = (e) =>{ //se envia el submit del form
     e.preventDefault();
+
+    if (description. trim().length <= 1){ //pequeña validacion para que no me agregue con espacios
+        return;
+    }
 
     const newTodo = { //creamos un nuevo TODO
         id : new Date().getTime(),
