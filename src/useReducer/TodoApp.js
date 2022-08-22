@@ -42,6 +42,13 @@ export const TodoApp = () => {
 
     }
 
+    const handleToggle = (todoId) =>{  //recibe el todoId en el cual quiero hacer el cambio (marcar como pendiente o tachado)
+        dispatch({
+            type:'toggle',
+            payload:todoId
+        })
+    }
+
     const handleSubmit = (e) =>{ //se envia el submit del form
     e.preventDefault();
 
@@ -65,24 +72,32 @@ export const TodoApp = () => {
 }
 
   return (
-    <div>           
-        <h1>TodoApp ({todos.length}) </h1>
-        <hr/>
+    <>
+    
+   
+    <div className='boxPadre'>           
+   
+    <main >  
+    
         <ul>{           // i (indice) para poner el num de la tarea
              todos.map((todo, i) => (
                 <li key={todo.id}>
-                <p>{i + 1} {todo.desc}</p>   
-                <button onClick={()=> handleDelete(todo.id)}>BORRAR</button>
+                <div className='boxTarea '><p className= {`${todo.done ? 'complete' : 'tarea'}`} onClick={()=> handleToggle(todo.id)}>{i + 1}. {todo.desc}</p></div>
+                <div className='boxBorrar'><button className='btnBorrar' onClick={()=> handleDelete(todo.id)}>BORRAR</button></div>
                 </li>
              ))
             }
         </ul>
+    </main>     
+
+    <nav>
+    <h1>TodoApp ({todos.length}) </h1>
 
         <h4>Agregar TODO</h4>
-        <hr/>
 
         <form onSubmit={handleSubmit}>
             <input 
+                className='inputAgregar'
                 type='text'
                 name= 'description'
                 placeholder='Aprender ...'
@@ -90,8 +105,11 @@ export const TodoApp = () => {
                 onChange={handleInputChange}
             />
 
-            <button type='submit'>AGREGAR</button>
+            <button className='btnAgregar' type='submit'>AGREGAR</button>
         </form>
+    </nav>
+
     </div>
+    </>
   )
 }
